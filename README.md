@@ -53,3 +53,23 @@ In addition to the packages specified in the table above, the following packages
 - `bazelisk` / `bazel`
 
 See [Dockerfile](Dockerfile) for the full details of installed packages.
+
+## Running self-contained Docker **inside** this image
+
+This variant starts its own `dockerd`, enabling `docker build`, `docker run`,
+and multi-stage builds entirely inside **codex-universal** without mounting the
+host socket.
+
+```bash
+# Build the extended image
+docker build -t codex-dind .
+
+# Run with the required privileges
+docker run --rm -it --privileged codex-dind bash
+
+# Inside the container
+scripts/test_build_image.sh
+```
+
+> ⚠️ Running Docker-in-Docker requires `--privileged` (or equivalent caps +
+> mounts). Keep untrusted workloads sandboxed.

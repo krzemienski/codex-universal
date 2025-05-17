@@ -1,0 +1,11 @@
+name: Docker-in-Docker Test
+on: pull_request
+jobs:
+  dind-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build extended image
+        run: docker build -t codex-dind .
+      - name: Validate inner build
+        run: docker run --rm --privileged codex-dind scripts/test_build_image.sh
